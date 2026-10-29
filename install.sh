@@ -116,5 +116,8 @@ for dest in "${targets[@]}"; do
 done
 
 if [ "$DRY_RUN" -eq 0 ] && [ "$UNINSTALL" -eq 0 ]; then
+  echo ""
+  echo "  (^_^) ready to debug"
+  echo ""
   echo "Reload the agent if needed."
 fi
