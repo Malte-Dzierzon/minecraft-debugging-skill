@@ -11,25 +11,29 @@
 
 A large modpack spreads its evidence across logs, crash reports, and
 profiler output. This skill gives your agent a fixed workflow for reading
-it: inventory the instance, reconstruct the timeline, branch by symptom,
-and report what the evidence supports — with a reversible test per claim.
+it: wait for the instance path, inventory the evidence with session
+binding, reconstruct the timeline, branch by symptom, verify every
+setting/runtime/version claim — and report bottom line plus the one next
+test that settles the uncertainty.
 Works with Forge, NeoForge, Fabric, and Quilt, in any launcher layout.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/workflow-dark.svg" />
-  <img src="assets/workflow-light.svg" alt="Workflow: collect evidence, order the timeline, branch into crash or slow, end with verdict and test plan" width="860" />
+  <img src="assets/workflow-light.svg" alt="Workflow: wait for the instance path, collect evidence, order the timeline, branch into crash or slow, verify every claim, end with bottom line and next test" width="860" />
 </picture>
 
 <details>
 <summary><b>How it works</b></summary>
 
-- Inventory the instance with timestamps and session binding — then pin the run by correlation, not filename.
+- Wait for the instance path — no scanning for modpacks.
+- Inventory the evidence with timestamps and session binding — then pin
+  the run by correlation, not filename.
 - Order the timeline and attribute the failure to the first causal break,
   not the final log entry.
 - Branch by symptom: crash and compatibility, performance and the JVM, then
   verify every setting/runtime/version claim before recommending it.
-- Report bottom line, evidence, findings, what is not proven, ranked
-  reversible steps, and the one next capture that settles the uncertainty.
+- Report bottom line, evidence, what is not proven, ranked reversible
+  steps, and the one next capture that settles the uncertainty.
 </details>
 
 <details>

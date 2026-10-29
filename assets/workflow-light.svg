@@ -1,40 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1030 240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#57606a"/>
     </marker>
   </defs>
   <g fill="#ffffff" stroke="#57606a" stroke-width="1.5">
-    <rect x="20" y="95" width="140" height="50" rx="6"/>
-    <rect x="185" y="95" width="140" height="50" rx="6"/>
-    <path d="M 400 58 L 462 120 L 400 182 L 338 120 Z"/>
-    <rect x="505" y="28" width="160" height="50" rx="6"/>
-    <rect x="505" y="162" width="160" height="50" rx="6"/>
-    <rect x="700" y="95" width="140" height="50" rx="6"/>
+    <rect x="15" y="95" width="125" height="50" rx="6"/>
+    <rect x="155" y="95" width="125" height="50" rx="6"/>
+    <rect x="295" y="95" width="125" height="50" rx="6"/>
+    <path d="M 490 58 L 556 120 L 490 182 L 424 120 Z"/>
+    <rect x="581" y="28" width="150" height="50" rx="6"/>
+    <rect x="581" y="162" width="150" height="50" rx="6"/>
+    <rect x="760" y="85" width="115" height="70" rx="6"/>
+    <rect x="890" y="95" width="123" height="50" rx="6"/>
   </g>
   <g fill="none" stroke="#57606a" stroke-width="1.5">
-    <path d="M 160 120 H 183" marker-end="url(#arrow)"/>
-    <path d="M 325 120 H 336" marker-end="url(#arrow)"/>
-    <path d="M 437 95 H 471 V 53 H 503" marker-end="url(#arrow)"/>
-    <path d="M 437 145 H 471 V 187 H 503" marker-end="url(#arrow)"/>
-    <path d="M 665 53 H 688 V 112 H 698" marker-end="url(#arrow)"/>
-    <path d="M 665 187 H 680 V 128 H 698" marker-end="url(#arrow)"/>
+    <path d="M 140 120 H 153" marker-end="url(#arrow)"/>
+    <path d="M 280 120 H 293" marker-end="url(#arrow)"/>
+    <path d="M 420 120 H 422" marker-end="url(#arrow)"/>
+    <path d="M 536 100 H 570 V 53 H 579" marker-end="url(#arrow)"/>
+    <path d="M 536 140 H 570 V 187 H 579" marker-end="url(#arrow)"/>
+    <path d="M 731 53 H 745 V 108 H 758" marker-end="url(#arrow)"/>
+    <path d="M 731 187 H 745 V 132 H 758" marker-end="url(#arrow)"/>
+    <path d="M 875 120 H 888" marker-end="url(#arrow)"/>
   </g>
   <g fill="#24292f" font-size="14" text-anchor="middle">
-    <text x="90" y="114">collect</text>
-    <text x="90" y="132">evidence</text>
-    <text x="255" y="114">order the</text>
-    <text x="255" y="132">timeline</text>
-    <text x="585" y="58">find the cause</text>
-    <text x="585" y="192">find the bottleneck</text>
-    <text x="770" y="114">verdict</text>
-    <text x="770" y="132">+ test plan</text>
+    <text x="78" y="114">wait for</text>
+    <text x="78" y="132">path</text>
+    <text x="217" y="114">collect</text>
+    <text x="217" y="132">evidence</text>
+    <text x="357" y="114">order the</text>
+    <text x="357" y="132">timeline</text>
+    <text x="656" y="58">find the cause</text>
+    <text x="656" y="183">find the</text>
+    <text x="656" y="201">bottleneck</text>
+    <text x="817" y="114">verify</text>
+    <text x="817" y="132">claims</text>
+    <text x="951" y="114">bottom line</text>
+    <text x="951" y="132">+ next test</text>
   </g>
   <g fill="#24292f" font-size="13" text-anchor="middle">
-    <text x="400" y="125">crash or slow?</text>
+    <text x="490" y="125">crash or slow?</text>
   </g>
-  <g fill="#57606a" font-size="12" text-anchor="middle">
-    <text x="454" y="87">crash</text>
-    <text x="454" y="163">slow</text>
+  <g fill="#57606a" font-size="12" text-anchor="start">
+    <text x="540" y="90">crash</text>
+    <text x="540" y="156">slow</text>
   </g>
 </svg>
