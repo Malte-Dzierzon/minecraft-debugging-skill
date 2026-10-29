@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.DS_Store
+Thumbs.db
+# Never commit private Minecraft evidence to this repository.
+logs/
+crash-reports/
+*.sparkprofile
+*.jfr
+*.hprof
+hs_err_pid*.log
+replay_pid*.log
