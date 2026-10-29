@@ -50,6 +50,30 @@ Use these scenarios as manual acceptance tests before publishing or after major 
 
 **Failure conditions:** reading only `latest.log`; assuming an auxiliary report must be in a fixed path; sharing a public profile link without consent.
 
+## Evaluation 7 — Spark regression (max, merged percentages, GUI, thread)
+
+**Fixture:** Spark profile: 4 ms interval, ~120 s, TPS ~20, MSPT med 3.13 / p95 7.27 / max 1910 ms, process CPU 31–37%, heap 85%, capture with a shader/GUI screen open, merged mod percentages, EMF/ETF render methods, Iris shadow calls, Sodium terrain work — plus a crash five days later (DH 3.3.3 native SQLite `UnsatisfiedLinkError` on a Java 25-selected instance).
+
+**Expected behaviour:** name the sampled thread before any bottleneck claim; treat the 1910 ms max as an isolated hitch against low med/p95 with timestamp correlation; never sum merged percentages; discount GUI-open cost and request a clean gameplay profile; keep Oct profile and Oct-29 crash as separate evidence items until a session link is shown; call 85% heap insufficient evidence for a memory claim.
+
+**Failure conditions:** declaring "render-thread-limited" from process CPU + method names; summing merged shares into a combined cost; ranking GUI-open overlay cost as in-game cost; using the max as sustained lag; merging the two dates into one causal event.
+
+## Evaluation 8 — Setting-ownership regression (shadow distance, LOD, Java)
+
+**Fixture:** `config/iris.properties` holds a `maxShadowRenderDistance`-style key, shader pack Complementary Reimagined + Euphoria Patches active, `DistantHorizons.toml` has `lodChunkRenderDistanceRadius = 256`, instance runs Java 25 with MC 1.21.1 / DH 3.3.3, crash is `UnsatisfiedLinkError: NativeDB._open_utf8`.
+
+**Expected behaviour:** identify the active pack + version, prove which side (Iris vs pack GLSL `shadowDistance`) owns the shadow control before recommending a change; check the installed DH version's units/defaults/range before judging 256; treat Java 25 as a compatibility risk and the `UnsatisfiedLinkError` as a native binding mismatch until the release's requirements and a supported-runtime repro settle it.
+
+**Failure conditions:** attributing pack shadow distance to `iris.properties` by name similarity; calling 256 "too high" from the number alone; claiming Java 25 definitively caused the native failure from co-occurrence.
+
+## Evaluation 9 — Log-noise and mod-presence regression
+
+**Fixture:** `latest.log` with 994× `Unsupported Uniform Type: bool`, 490× JEI recipe exceptions, 154× client task NPEs; Spark shows EMF/ETF, Iris, Sodium, Xaero, Flywheel frames; mods installed but features unused.
+
+**Expected behaviour:** triage by phase/severity/consequence with one representative stack each instead of ranking by count; never recommend removing EMF/ETF/Iris/Sodium/Xaero/Flywheel from profile presence alone — establish measurable avoidable cost tied to the symptom plus user value; distinguish mod presence from mod causation.
+
+**Failure conditions:** treating repeat counts as severity ranking; recommending mod removal from a hot frame; equating the three unrelated warning classes.
+
 ## General acceptance checklist
 
 - [ ] The output states the selected analysis depth.

@@ -2,6 +2,7 @@
 
 - [match the tool to the symptom](#match-the-tool-to-the-symptom)
 - [spark](#spark)
+- [reading spark numbers](#reading-spark-numbers)
 - [loading profiler](#loading-profiler)
 - [client vs server](#client-vs-server)
 - [JVM: runtime, GC, hangs](#jvm-runtime-gc-hangs)
@@ -36,12 +37,34 @@ commands may not exist on clients. Check the installed version's help.
 verified compatible parser. If parsing fails, say so — never invent fields
 or a call tree from `strings` output.
 
-Interpretation rules: read metadata first; separate render, tick, worker,
-and background threads; inclusive time includes children, self time doesn't
-— never add parent and child percentages; state the denominator (samples,
-wall time, thread time); a hot path is observed work, not proven waste —
-confirm against expected workload and a controlled change. Obfuscated names
-and heuristic class-substring rules can misclassify; inspect real stacks.
+## Reading Spark numbers
+
+Hard rules — these are the mistakes the old workflow kept making:
+
+1. **Thread first.** Identify which thread/process was sampled before any
+   claim. Total process CPU (e.g. 31–37%) never proves which thread limits
+   the frame. "Render-thread-limited" needs the render thread hot, not a
+   process percentage plus familiar method names.
+2. **Inclusive vs exclusive.** Merged/overlapping call paths double-count
+   parents and children. Never sum merged mod percentages into a combined
+   cost (`11.42% + 9.09% ≈ 20.5%` is invalid unless the format's accounting
+   makes it additive). State the denominator: samples, wall time, or thread
+   time.
+3. **Distribution, not max.** A single extreme max (e.g. 1910 ms against a
+   3.13 ms median and 7.27 ms p95) is a potentially important isolated hitch,
+   not sustained lag. Correlate it with timestamps/events; report median,
+   p95, max, duration, interval, and capture conditions together.
+4. **GUI state.** Cost recorded with a menu, F3 overlay, or shader settings
+   screen open (e.g. `GuiLayerManager.render()`, BetterF3, `mouseClicked()`
+   frames) is not normal gameplay overhead. Ask for or capture a clean
+   gameplay profile before ranking UI cost as an in-game cost.
+5. **Hot ≠ broken.** A hot path is observed work, not proven waste —
+   confirm against expected workload and a controlled change. Obfuscated
+   names and heuristic class-substring rules can misclassify; inspect real
+   stacks. A mod name in a hot frame is not a removal recommendation.
+6. **GPU is unmeasured.** Spark samples Java-side work only. Shader/shadow
+   cost, GPU frame time, and utilization need GPU-side evidence; never
+   present a Java method share as GPU time.
 
 ## Loading profiler
 
@@ -51,6 +74,10 @@ it installed; use a disposable world or stop after the loading measurement.
 Capture a fresh representative startup, record the exact output location,
 and compare multiple launches (cold vs warm) before ranking mods. Reported
 shares are attribution under its model, not perfect per-mod accounting.
+Never infer startup cost from runtime Spark data. Verify the profiler's
+current output format and known limitations from its official project
+documentation or source at analysis time
+(https://modrinth.com/mod/loading-profiler).
 
 ## Client vs server
 

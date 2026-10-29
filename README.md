@@ -23,15 +23,13 @@ Works with Forge, NeoForge, Fabric, and Quilt, in any launcher layout.
 <details>
 <summary><b>How it works</b></summary>
 
-- Inventory the instance: logs, disconnect reports, crash reports, JVM logs,
-  profiler captures — then pin the run by timestamp, not filename.
+- Inventory the instance with timestamps and session binding — then pin the run by correlation, not filename.
 - Order the timeline and attribute the failure to the first causal break,
   not the final log entry.
-- Branch by symptom: crash and compatibility, or performance and the JVM.
-- Report verdict, evidence, confidence, and a ranked action plan.
-
-Four depths: Quick, Standard, Deep, Forensic.
-
+- Branch by symptom: crash and compatibility, performance and the JVM, then
+  verify every setting/runtime/version claim before recommending it.
+- Report bottom line, evidence, findings, what is not proven, ranked
+  reversible steps, and the one next capture that settles the uncertainty.
 </details>
 
 <details>
@@ -62,10 +60,11 @@ agent afterwards.
 <details>
 <summary><b>Repository layout</b></summary>
 
-- `SKILL.md` — the skill: workflow, rules, branch router.
-- `references/1-artifacts.md` — finding artifacts, safe search, privacy.
-- `references/2-crash.md` — crash signatures, exception chains, mixins.
-- `references/3-performance.md` — Spark, Loading Profiler, GC, hangs.
+- `SKILL.md` — the skill: instance gate, phased workflow, report shape.
+- `references/1-artifacts.md` — inventory-first evidence gathering.
+- `references/2-crash.md` — crash signatures, log triage, native, memory.
+- `references/3-performance.md` — Spark semantics, Loading Profiler, GC.
+- `references/4-verification.md` — setting ownership, LOD/shader/Java rules.
 - `tests/EVALUATIONS.md` — maintainer acceptance scenarios.
 - `install.sh` — payload installer for local agents.
 

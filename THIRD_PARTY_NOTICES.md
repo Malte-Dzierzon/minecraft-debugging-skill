@@ -9,3 +9,8 @@ Linked references: Spark docs (https://spark.lucko.me/docs/), Loading
 Profiler (https://modrinth.com/mod/loading-profiler), VisualVM
 (https://visualvm.github.io/features.html), Oracle Java docs. External names
 remain their owners' property; links are references, not endorsements.
+
+Behavioral guidance for profiler interpretation was informed by current
+Spark command documentation (default 4 ms interval, `/sparkc` on
+Forge/Fabric clients, `--thread` selection) and the Iris `shadowDistance`
+pack-constant reference; wording is original, facts rechecked 2026-10-29.

@@ -1,6 +1,7 @@
 # 2 — crashes and compatibility
 
 - [failure signatures](#failure-signatures)
+- [log triage first](#log-triage-first)
 - [reading exception chains](#reading-exception-chains)
 - [compatibility checks](#compatibility-checks)
 - [minimal testing](#minimal-testing)
@@ -34,21 +35,38 @@ resource reload, world load, or runtime — then match the signature:
 
 A signature names a mechanism, not the guilty mod.
 
-## Reading exception chains
+## Log triage first
 
-1. Find the first causally relevant exception and every `Caused by` /
-   suppressed section. Wrappers like `ModLoadingException` only report a
-   deeper cause.
-2. Identify the throwing method, its callers, and the phase.
-3. Search earlier log lines for the first warning, version mismatch, failed
-   mixin, invalid registry value, or missing dependency tied to that cause.
-4. Compare crash report against `latest.log` / `debug.log` — they preserve
-   different context.
-5. No source line available? Say so. Never invent one.
+Triage in this order — root cause first, noise never:
+
+1. **First relevant exception + full `Caused by` chain.** Wrappers like
+   `ModLoadingException` only report a deeper cause. One representative stack,
+   not five.
+2. **Lines before the exception:** first warning, version mismatch, failed
+   mixin, invalid registry value, missing dependency tied to that cause.
+3. **Crash report vs `latest.log` / `debug.log`:** they preserve different
+   context — compare both for phase and trigger.
+4. **Repeated messages:** group by count (`994× …`), inspect one instance's
+   stack, timestamp span, and consequence. Repeated warnings are not equally
+   severe: a shader-uniform incompatibility spam, a recipe-registration
+   exception, and a configuration-phase NPE differ in phase, severity, and
+   relation to the crash. Never rank them by count alone.
+5. **No source line available?** Say so. Never invent one.
 
 The last mod in a stack is often where a conflict surfaces, not where it
 originated. A throwing vanilla method fed a bad value by a mod looks
 identical to a vanilla bug without the earlier evidence.
+
+## Reading exception chains
+
+A JNI `UnsatisfiedLinkError` (e.g. a missing/mismatched native method such
+as `NativeDB._open_utf8`) is direct evidence of a native binding/load
+mismatch — it is not, by itself, proof of which Java major version caused
+it. Before naming a root cause: identify the exact native method
+declaration, the packaged native library (version/architecture), the mod
+release's declared runtime requirements, and reproducibility under a
+documented supported runtime. Java-version mismatch stays a hypothesis
+until tested or directly documented.
 
 ## Compatibility checks
 
@@ -103,7 +121,7 @@ measures GPU execution.
 
 ## Memory failures
 
-- **Java heap OOM:** needs heap occupancy, allocation pressure, retained
+- **Java heap OOM:** heap occupancy, allocation pressure, retained
   objects, GC behavior, repeatability.
 - **Metaspace OOM:** class loading, classloader retention, transformation
   counts.
@@ -111,5 +129,8 @@ measures GPU execution.
 - **OS kill / abrupt exit:** no Java OOM message doesn't rule out memory
   pressure; check OS/launcher evidence when available.
 
-Never jump to "add more RAM." More heap can postpone a leak, inflate GC
-latency, or starve the OS. Match the fix to the failure type.
+Heap occupancy alone (e.g. 85%) is not a memory problem. Check allocation
+rate, GC frequency and pause time, headroom over time, and symptom
+correlation before calling it pressure or a leak. Never jump to "add more
+RAM." More heap can postpone a leak, inflate GC latency, or starve the OS.
+Match the fix to the failure type; never raise heap as a reflex.
