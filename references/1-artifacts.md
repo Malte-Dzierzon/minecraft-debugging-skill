@@ -12,7 +12,8 @@ Start from the exact supplied path. It may be the instance root, the game
 directory (`minecraft/` or `.minecraft/`), a logs folder, or an exported pack.
 If `instance.cfg` or `mmc-pack.json` sits in the parent, that parent is the
 instance root — include its metadata. Layout varies by launcher and user
-choice; never assume a fixed structure.
+choice; never assume a fixed structure. Without a supplied path, ask for it
+first — never go looking for instances on your own.
 
 ## What to look for
 

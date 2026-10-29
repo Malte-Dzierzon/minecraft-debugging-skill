@@ -13,6 +13,24 @@ modpacks, launcher-managed instances. OS- and launcher-independent.
 Never recommend removing mods, changing JVM flags, adding RAM, or touching
 graphics settings without naming the evidence and how to verify the outcome.
 
+## Instance path — wait for it
+
+No instance path, no diagnosis. NEVER scan the computer for modpacks or
+instances: no filesystem-wide search, no `find /`, no home-directory crawl,
+no launcher-library enumeration to "find something to work on".
+
+1. **Path supplied → use exactly that path.** The only permitted expansion
+   is the immediate parent when it holds `instance.cfg` / `mmc-pack.json`
+   (instance root with game dir inside). Everything else stays out of scope.
+2. **No path supplied → STOP and ask before doing anything else.** No file
+   listing, no searching, no theorizing. The path question outranks the
+   scope-check question below.
+
+Ask once, concretely:
+
+> I need your instance/modpack folder path to start — e.g. `/home/xealom/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances/Server Modpack/minecraft`. Prism Launcher: right-click instance → Folder; Modrinth App / CurseForge / FTB App: instance settings → installation folder; vanilla: `.minecraft/`. Paste the path here — instance root or the `minecraft/` / `.minecraft/` game directory inside it both work.
+
+
 ## Use when the user reports
 
 - Crash, freeze, hang, black screen, startup failure, failed world load, or
