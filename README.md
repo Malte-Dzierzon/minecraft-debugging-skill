@@ -13,34 +13,29 @@ A large modpack spreads its evidence across logs, crash reports, and
 profiler output. This skill gives your agent a fixed workflow for reading
 it: inventory the instance, reconstruct the timeline, branch by symptom,
 and report what the evidence supports — with a reversible test per claim.
+Works with Forge, NeoForge, Fabric, and Quilt, in any launcher layout.
+
+```mermaid
+flowchart LR
+    A[collect evidence] --> B[order the timeline]
+    B --> C{crash or slow?}
+    C -->|crash| D[find the cause]
+    C -->|slow| E[find the bottleneck]
+    D --> F[verdict + test plan]
+    E --> F
+```
 
 <details>
 <summary><b>How it works</b></summary>
 
 - Inventory the instance: logs, disconnect reports, crash reports, JVM logs,
-  profiler captures — then pin the right run by timestamp, not filename.
-- Reconstruct a timeline: first causally relevant failure wins, not the last
-  scary line.
-- Branch by symptom: crashes and compatibility, or performance and the JVM.
+  profiler captures — then pin the run by timestamp, not filename.
+- Order the timeline and attribute the failure to the first causal break,
+  not the final log entry.
+- Branch by symptom: crash and compatibility, or performance and the JVM.
 - Report verdict, evidence, confidence, and a ranked action plan.
 
 Four depths: Quick, Standard, Deep, Forensic.
-
-</details>
-
-<details>
-<summary><b>Use</b></summary>
-
-```text
-Use the minecraft-debugging-skill skill on
-/path/to/Prism/instances/MyPack/.minecraft.
-The client freezes on world join — inventory first,
-then ask me for Quick, Standard, Deep, or Forensic.
-```
-
-Works with Forge, NeoForge, Fabric, and Quilt, and any launcher layout:
-instance root, game directory, logs folder, or exported pack. Read-only by
-default; no uploads without permission.
 
 </details>
 
