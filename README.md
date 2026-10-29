@@ -15,15 +15,10 @@ it: inventory the instance, reconstruct the timeline, branch by symptom,
 and report what the evidence supports — with a reversible test per claim.
 Works with Forge, NeoForge, Fabric, and Quilt, in any launcher layout.
 
-```mermaid
-flowchart LR
-    A[collect evidence] --> B[order the timeline]
-    B --> C{crash or slow?}
-    C -->|crash| D[find the cause]
-    C -->|slow| E[find the bottleneck]
-    D --> F[verdict + test plan]
-    E --> F
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/workflow-dark.svg" />
+  <img src="assets/workflow-light.svg" alt="Workflow: collect evidence, order the timeline, branch into crash or slow, end with verdict and test plan" width="860" />
+</picture>
 
 <details>
 <summary><b>How it works</b></summary>
