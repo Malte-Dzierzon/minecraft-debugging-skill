@@ -1,23 +1,18 @@
 <div align="center">
 
-# minecraft-debugging-skill
+# Minecraft Debugging Skill
 
 **Drop this skill into your local agent to debug large Minecraft modpacks.**
 
-![](https://img.shields.io/badge/ai_skill-minecraft_debugging-16a3da?style=flat-square&labelColor=070e15)
-![](https://img.shields.io/badge/minecraft-java_edition-3b4250?style=flat-square&labelColor=070e15)
-![](https://img.shields.io/badge/forge-supported-3b4250?style=flat-square&labelColor=070e15)
-![](https://img.shields.io/badge/neoforge-supported-3b4250?style=flat-square&labelColor=070e15)
-![](https://img.shields.io/badge/fabric-supported-3b4250?style=flat-square&labelColor=070e15)
-![](https://img.shields.io/badge/quilt-supported-3b4250?style=flat-square&labelColor=070e15)
+![](https://img.shields.io/badge/minecraft-java_edition-16a3da?style=flat-square&labelColor=070e15)
 ![](https://img.shields.io/badge/license-MIT-3b4250?style=flat-square&labelColor=070e15)
 
 </div>
 
-Large modpacks break in ways generic advice can't fix. This skill gives your
-agent a fixed workflow for it: inventory the instance, reconstruct the
-timeline, branch by symptom, and report verdict plus evidence. No guessing,
-no "allocate 16GB and delete Sodium".
+A large modpack spreads its evidence across logs, crash reports, and
+profiler output. This skill gives your agent a fixed workflow for reading
+it: inventory the instance, reconstruct the timeline, branch by symptom,
+and report what the evidence supports — with a reversible test per claim.
 
 <details>
 <summary><b>How it works</b></summary>
@@ -43,8 +38,9 @@ The client freezes on world join — inventory first,
 then ask me for Quick, Standard, Deep, or Forensic.
 ```
 
-Works with any launcher layout: instance root, game directory, logs folder,
-or exported pack. Read-only by default; no uploads without permission.
+Works with Forge, NeoForge, Fabric, and Quilt, and any launcher layout:
+instance root, game directory, logs folder, or exported pack. Read-only by
+default; no uploads without permission.
 
 </details>
 
@@ -52,19 +48,24 @@ or exported pack. Read-only by default; no uploads without permission.
 <summary><b>Install</b></summary>
 
 ```bash
+git clone https://github.com/Malte-Dzierzon/minecraft-debugging-skill.git
+cd minecraft-debugging-skill
 ./install.sh
 ```
 
-Copies the skill payload (`SKILL.md` + `references/`) to
-`~/.omp/agent/skills/minecraft-debugging-skill/`. Other location:
+Symlinks the payload (`SKILL.md` + `references/`) into
+`~/.omp/agent/skills/minecraft-debugging-skill/`, so a later `git pull`
+updates the installed skill. Other agents:
 
 ```bash
-./install.sh ~/.claude/skills/minecraft-debugging-skill
-# or: SKILL_DIR=/custom/path ./install.sh
+./install.sh --agent claude   # ~/.claude/skills/
+./install.sh --agent codex    # ~/.codex/skills/
+./install.sh --all            # every agent dir that already exists
 ```
 
-`README.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`, and `tests/` stay in the
-repo — only the payload gets installed. Reload the agent if needed.
+`--copy` copies instead of linking, `--dry-run` previews, `--uninstall`
+removes. Only the payload is installed — repo docs stay here. Reload the
+agent afterwards.
 
 </details>
 
