@@ -122,16 +122,10 @@ thrower may be vanilla fed a bad value upstream.
 
 Order by information value and risk: no-change checks → one-variable
 isolation on a copy → targeted measurement → mod-group search with backup
-→ config/version change with rollback. Per action: change, rationale,
-expected observation, success criterion, rollback and save risk. Benchmarks
-hold workload, world, settings, JVM, and warm-up constant; report medians
-and tails, not one lucky frame.
+→ config/version change with rollback. Benchmarks hold workload, world,
+settings, JVM, and warm-up constant; report medians and tails, not one lucky frame.
 
-Report shape: **Verdict** → **Evidence** (paths, lines, metrics, why they
-matter) → **Confidence + scope** (inspected vs missing) → **Action plan**
-(ranked, reversible) → **Next capture** (exact artifact + safe method, only
-if needed). Small excerpts only; never fabricate trees, percentages, links,
-or results.
+Report per ## Report below — no other shape.
 
 ## Sub-agents
 
@@ -150,3 +144,92 @@ non-overlapping roles.
   version checks, minimal tests, mixins, native, memory.
 - [3 — performance and the JVM](references/3-performance.md): Spark, Loading
   Profiler, client vs server, GC, hangs, controlled experiments.
+
+## Report
+
+Final message shape — fixed sections, fixed order. Goal: skimmable in 60
+seconds, verifiable in 10 minutes. Short lines, short sentences, no prose
+paragraphs.
+
+### Verdict
+
+Max 3 sentences: problem kind (crash / hang / FPS / tick / startup), largest
+measured contributor, stability blocker if any. Name exactly one primary
+hypothesis, and what would weaken it.
+
+### Key metrics
+
+Table first whenever numbers were captured — never bury Spark/JVM/TPS/MSPT
+numbers in prose. Values are measured or `n/a (missing)`, never inferred.
+Plain GitHub-flavored pipe tables only (runtimes like OhMyPi/CloudCode agents
+render them formatted), no HTML.
+
+| Metric | Value | Why it matters |
+|---|---|---|
+| TPS (1m / 5m / 15m) | 20.0 / 19.0 / 19.7 | ≥19 = tick-healthy, fault lies elsewhere |
+| MSPT med / p95 / max | 3.1 / 7.3 / 1910 ms | max≫p95 = single hitches, not load |
+| Heap used / max | 5.6 / 6.5 GB (85%) | >80% = GC pressure plausible |
+| CPU process | ~32–37% | one saturated thread = CPU-side limit |
+| Java | 25.0.1 (needs 21) | unsupported runtime = crash risk |
+
+### Hotspots
+
+Hottest measured contributors as a table when profiler data exists — ranked,
+overlap noted (merge mode double-counts parents+children). One row per
+mod/method, implicated config as `code`. No profile → skip the table, say
+which capture would answer it.
+
+| # | Source | Share | Hot method / setting | Meaning |
+|---|---|---|---|---|
+| 1 | neoforge | 38% | `GuiLayerManager.render()` 19% | GUI overlays dominate the frame |
+| 2 | iris | 21% | `renderShadows()` 10% | shadow pass, `maxShadowRenderDistance=10` |
+| 3 | sodium | 16% | `setupTerrain()` 6% | chunk rebuild cost |
+| 4 | entity_model_features | 11% | `EMFModelPartVanilla.render()` 11% | custom entity models |
+
+### Evidence
+
+Bullets only, grouped: profile → crash → config → logs. Each bullet: source
+path (or viewer link), one number or quoted line, what it proves. Group
+repeats by count (`994× …`), never paste stacks or log walls. Every number
+here MUST also appear in Key metrics or Hotspots — no orphan data.
+
+### Confidence + scope
+
+Table, one row per claim: `Confirmed` / `Strongly supported` / `Plausible` /
+`Unresolved`, tied to path:line / metric / node. End with a `Missing:` line
+(which capture flips each Plausible/Unresolved) and a `Did not:` line (game
+not run, nothing changed — if true).
+
+| Claim | Confidence | Basis |
+|---|---|---|
+| Render-bound, not TPS-bound | Strongly supported | MSPT max 1910 ms at TPS 20 |
+| F3/GUI share inflated | Plausible | profile had GUI open 2.6% |
+| Leak | Unresolved | no repeated heap samples |
+
+### Action plan
+
+Numbered table, cheapest information per risk first. Verify and Rollback
+columns are REQUIRED: every step states the exact metric that moves plus its
+target, and how to undo the change.
+
+| # | Change | Why | Verify (metric → target) | Rollback |
+|---|---|---|---|---|
+| 1 | Java 25 → 21 (`instance.cfg`) | DH native crash | next start: no `UnsatisfiedLinkError` | revert `JavaPath` |
+| 2 | DH LOD radius 256 → 128 | shadow/terrain load | `renderShadows()` < 5% | restore `.toml` |
+| 3 | EMF+ETF features off | ~20% CPU combined | both < 2% in Spark | re-enable mods |
+
+### Next capture
+
+Only if needed: exact command + exact duration + exact condition (e.g.
+`/spark profiler`, 2–3 min, no GUI open), then what comparison decides the
+next step. One variable per capture, never batched changes.
+
+### Rules for all of the above
+
+- Tables are real GitHub-flavored Markdown, 3–7 rows each; prose never
+  carries numbers alone.
+- Redact secrets in paths/quotes (tokens, IPs, usernames). No uploads or
+  public viewer links without permission.
+- Small excerpts only; never fabricate trees, percentages, links, results.
+- Same data once: a number lives in exactly one table, referenced — not
+  repeated — elsewhere.
