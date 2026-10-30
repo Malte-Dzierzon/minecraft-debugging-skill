@@ -1,28 +1,63 @@
 # 1 — finding artifacts
 
+- [reconnaissance vs inventory](#reconnaissance-vs-inventory)
 - [where to look](#where-to-look)
 - [what to look for](#what-to-look-for)
+- [profiler and tool discovery](#profiler-and-tool-discovery)
 - [building the inventory](#building-the-inventory)
 - [pinning the right run](#pinning-the-right-run)
 - [reading safely](#reading-safely)
 - [privacy](#privacy)
 
+## Reconnaissance vs inventory
+
+Two distinct passes. Never merge them.
+
+**Pass 1 — reconnaissance (Stage 1, before depth selection).** Cheap,
+read-only, inside the supplied scope only. Goal: just enough to let the
+user pick Quick / Standard / Deep / Forensic. Inspect at most:
+
+1. Minecraft version + loader/version from launcher metadata, manifests,
+   or log headers.
+2. Mod count + broad categories (profiler/diagnostic, performance
+   optimization, renderer/shader/chunk/LOD, other relevant).
+3. Profiler/diagnostic mods present: Spark, Loading Profiler, other
+   clearly identified profiling mods — with versions.
+4. Existing evidence files present (names + timestamps, not full reads):
+   `*.sparkprofile`, `*.jfr`, `*.hprof`, thread dumps, Loading Profiler
+   outputs, recent logs/crash reports.
+5. External tools via `command -v` or equivalent only
+   (`visualvm`, `jmc`, `jcmd`/`jstack`/`jmap`/`jps`, `asprof`, `perf`,
+   `hotspot`). No filesystem crawl, no install, no launch.
+6. OS/architecture context only when directly available and relevant.
+
+Forbidden in reconnaissance: reading every log in depth, attaching to a
+JVM, opening VisualVM, starting Spark/JFR/dumps, installing anything,
+launching Minecraft, guessing paths, or crawling outside the supplied
+directory. Report, then ask the single depth question.
+
+**Pass 2 — inventory (Stage 3, after depth selection).** Depth-appropriate:
+Quick reads only the relevant excerpt; Standard does a focused inventory;
+Deep/Forensic do the complete relevant inventory plus a session ledger
+(artifact → session/date mapping, historical items marked).
+
 ## Where to look
 
-Open this reference first, before any diagnosis. Start from the exact
-supplied path. It may be the instance root, the game directory
-(`minecraft/` or `.minecraft/`), a logs folder, or an exported pack.
-If `instance.cfg` or `mmc-pack.json` sits in the parent, that parent is the
-instance root — include its metadata. Layout varies by launcher and user
-choice; never assume a fixed structure. Without a supplied path, ask for it
-first — never go looking for instances on your own.
+Start from the exact supplied path. It may be the instance root, the game
+directory (`minecraft/` or `.minecraft/`), a logs folder, or an exported
+pack. If `instance.cfg` or `mmc-pack.json` sits in the parent, that parent
+is the instance root — include its metadata. Layout varies by launcher and
+user choice; never assume a fixed structure. Without a supplied path, ask
+for it first — never go looking for instances on your own. The only
+permitted parent expansion is that single launcher-metadata parent; no
+other out-of-scope traversal.
 
 ## What to look for
 
-Search in priority order, stopping when the evidence suffices for the chosen
-depth. Recurse into nonstandard mod-generated directories (`profile/`,
-`diagnostics/`, `reports/`, `config/*/`) by name, timestamp, and content —
-never assume a fixed path.
+Search in priority order, stopping when the evidence suffices for the
+chosen depth. Recurse into nonstandard mod-generated directories
+(`profile/`, `diagnostics/`, `reports/`, `config/*/`) by name, timestamp,
+and content — never assume a fixed path.
 
 1. Session logs: `logs/latest.log`, `logs/debug.log`, rotated `*.log.gz`,
    launcher/game output logs.
@@ -30,7 +65,8 @@ never assume a fixed path.
    analysis, often richer than the log tail.
 3. Crash reports: `crash-reports/crash-*.txt` (client and server variants).
 4. JVM fatal logs: `hs_err_pid*.log`, `replay_pid*.log`.
-5. Startup timing: `logs/profiler/loading-*.txt` (Loading Profiler output).
+5. Startup timing: `logs/profiler/loading-*.txt` (Loading Profiler output —
+   confirm exact filename/path per installed version).
 6. Profiler captures: `*.sparkprofile`, `*.jfr`, `*.hprof`, thread dumps, GC
    logs, VisualVM snapshots, timing reports.
 7. Mod-generated diagnostics: Crash Assistant output under
@@ -54,8 +90,27 @@ Notes:
 - A mod JAR filename may not match its internal version; prefer
   `META-INF/mods.toml`, `neoforge.mods.toml`, `fabric.mod.json`, or
   loader-reported metadata when versions matter.
+- A performance optimization mod is not automatically a profiler, and a
+  profiler is not automatically an optimization. Never classify by the word
+  "performance" in a title — verify what the mod does.
 - Names are hints, not a schema. Artifacts may be renamed, compressed,
   exported, or saved outside the instance.
+
+## Profiler and tool discovery
+
+Distinguish three classes and report each with a confidence state:
+
+- **Minecraft-aware profilers:** Spark (`/spark` vs `/sparkc` depends on
+  installed version/platform — check help), Loading Profiler
+  (startup-only, intrusive). State exact mod version + MC/loader pair.
+- **JVM tools:** VisualVM, JMC/JFR (`jcmd`, `jstack`), async-profiler.
+  State `found on PATH` / `not found on PATH` / `not checked`.
+- **OS tools:** Linux `perf`, KDAB Hotspot. Same three states; note
+  permission/kernel constraints when relevant.
+
+A missing PATH entry is "not detected by this check", never "not
+installed". Missing optional tools never block diagnosis — record the
+limitation and continue with available evidence.
 
 ## Building the inventory
 
@@ -71,7 +126,8 @@ artifact:
 
 One row per artifact is enough. Prefer the session that reproduces the
 problem; label everything else `historical`. When several sessions exist,
-never silently combine them.
+never silently combine them. Forensic runs additionally keep a shared
+evidence ledger with stable labels/paths per artifact.
 
 ## Pinning the right run
 

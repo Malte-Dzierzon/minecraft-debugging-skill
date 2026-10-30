@@ -4,6 +4,9 @@
 - [log triage first](#log-triage-first)
 - [reading exception chains](#reading-exception-chains)
 - [compatibility checks](#compatibility-checks)
+- [dependency and version verification](#dependency-and-version-verification)
+- [loader, mixin, and transformation conflicts](#loader-mixin-and-transformation-conflicts)
+- [world-specific vs pack-wide](#world-specific-vs-pack-wide)
 - [minimal testing](#minimal-testing)
 - [mixin failures](#mixin-failures)
 - [native and graphics failures](#native-and-graphics-failures)
@@ -80,6 +83,51 @@ Use primary sources: release notes, issue tracker, source repo, loader docs.
 Record exact versions and dates. Never declare an incompatibility from two
 mods merely co-occurring in a stack. Verify the report matches the exact
 version in use, not a nearby release.
+
+## Dependency and version verification
+
+For dependency-suspect crashes, verify each link in the chain against the
+installed artifacts — never from memory or a similarly named release:
+
+1. Read the exact installed mod version (JAR metadata, loader banner, or
+   manifest — not the filename alone).
+2. Read that release's declared dependencies and version ranges from its
+   own docs/source.
+3. Confirm the dependency is present at a satisfying version in `mods/`
+   or the pack manifest.
+4. Confirm the loader build satisfies every participant's declared range.
+
+A satisfied-looking filename pair that violates a declared range is still a
+mismatch. Record what each source proves (URL, version/date).
+
+## Loader, mixin, and transformation conflicts
+
+When two or more mods patch the same class/renderer/registry path, or a
+loader upgrade moved the target:
+
+1. Name the target class/method and each claimant (mod + version + injector
+   kind where visible).
+2. Check each claimant's supported MC/loader range — an upstream target
+   change breaks previously working patches.
+3. Prefer the earliest transformation failure in load order, not the last
+   mod named in the final stack.
+4. Resolve on a copy: disable one claimant (respecting dependencies),
+   retest the same action, compare logs.
+
+Never relax mixin checks as a generic fix — it hides a broken patch and
+risks later corruption. Only a mod's own docs can justify a specific
+compatibility setting, with a rollback plan.
+
+## World-specific vs pack-wide
+
+Before blaming the pack (or one save), separate the two:
+
+1. Does the failure reproduce on a fresh/disposable world with the same mod
+   set? If yes → pack-wide.
+2. Does it occur only on one save or content path (datapack, region,
+   player data)? If yes → world/data, not pack-wide.
+3. Never test either hypothesis on a valued world — use a copy or a
+   disposable world, with a backup first.
 
 ## Minimal testing
 

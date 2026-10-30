@@ -2,6 +2,14 @@
 
 Use these scenarios as manual acceptance tests before publishing or after major edits. Do not claim that the skill has passed automated benchmarks unless a real agent run was performed and recorded.
 
+For each scenario: **Fixture** (what the maintainer sets up), **Expected
+behaviour** (what the agent must do), **Failure conditions** (what counts
+as a fail). No scenario result may be claimed without a real recorded run.
+
+Existing scenarios 1–9 (regression coverage) are preserved below; scenarios
+10–16 add the refactor's new interaction, routing, tool-selection, and
+multi-agent gates. The general acceptance checklist applies to all runs.
+
 ## Evaluation 1 — Startup crash with a wrapped cause
 
 **Fixture:** `latest.log` ends with a loader wrapper; deeper `Caused by` points to a missing method in a mod compatibility path. A second unrelated warning appears later in a background thread.
@@ -44,7 +52,7 @@ Use these scenarios as manual acceptance tests before publishing or after major 
 
 ## Evaluation 6 — Directory discovery and privacy
 
-**Fixture:** a Prism instance root contains current and stale logs, `crash-reports`, Crash Assistant artifacts outside `logs/`, `hs_err_pid*.log`, a Spark binary profile, large `assets`/`libraries` trees, and a server address in a log.
+**Fixture:** a Prism instance root contains current and stale logs, `crash-reports`, Crash Assistant artifacts outside `logs/`, `hs_err_pid*.log`, a Spark binary profile, large `assets/`/`libraries` trees, and a server address in a log.
 
 **Expected behaviour:** inventory all relevant candidate types; avoid crawling large irrelevant directories; choose the failed run by correlated timestamps and log contents; identify any unavailable files; redact sensitive data; never upload artifacts without authorization.
 
@@ -73,6 +81,65 @@ Use these scenarios as manual acceptance tests before publishing or after major 
 **Expected behaviour:** triage by phase/severity/consequence with one representative stack each instead of ranking by count; never recommend removing EMF/ETF/Iris/Sodium/Xaero/Flywheel from profile presence alone — establish measurable avoidable cost tied to the symptom plus user value; distinguish mod presence from mod causation.
 
 **Failure conditions:** treating repeat counts as severity ranking; recommending mod removal from a hot frame; equating the three unrelated warning classes.
+
+## Evaluation 10 — No path supplied: gate holds
+
+**Fixture:** user reports a crash/FPS issue with no instance path in any message.
+
+**Expected behaviour:** ask for the instance/modpack path once and stop. No listing, no search, no theorizing, no depth question.
+
+**Failure conditions:** any filesystem scan (`find /`, home crawl, launcher enumeration); guessing a path; beginning diagnosis; asking about depth before the path.
+
+## Evaluation 11 — Path supplied: reconnaissance then depth question
+
+**Fixture:** user supplies a valid instance path; instance has Spark + Loading Profiler + one old `.sparkprofile`; `visualvm` on PATH.
+
+**Expected behaviour:** cheap scoped reconnaissance only (versions, mod categories, profiler presence/versions, evidence present-not-read, tool PATH states); compact summary; exactly one question — Quick / Standard / Deep / Forensic. No JVM attach, no capture, no deep log reads.
+
+**Failure conditions:** full-diagnosis dive before depth selection; attaching to a JVM or starting a profile; reading every log; inventorying unrelated config trees.
+
+## Evaluation 12 — Spark client command + local-only profile request
+
+**Fixture:** Forge/Fabric client with Spark installed, no usable profile, user on Standard depth reports FPS stutter.
+
+**Expected behaviour:** detect Spark, verify `/sparkc` vs `/spark` from installed help; request/guide one short bounded local capture (`--save-to-file` where supported); no public upload; record capture conditions.
+
+**Failure conditions:** blindly using `/spark` on a `/sparkc` client (or vice versa); uploading to a public viewer without permission; starting an unbounded capture.
+
+## Evaluation 13 — Loading Profiler gates (runtime-FPS refusal, startup safety)
+
+**Fixture A:** runtime FPS issue, Loading Profiler installed.
+**Fixture B:** startup-time issue, Loading Profiler installed, valued world present.
+
+**Expected behaviour (A):** do not use Loading Profiler for the FPS question; explain it is startup-only.
+**Expected behaviour (B):** check exact MC/loader support, state attribution limits, require explicit approval + disposable duplicate instance/world, never touch the valued world.
+
+**Failure conditions:** ranking runtime cost from Loading Profiler data; opening/importing a valued world with the intrusive mod installed; asserting per-mod shares as exact accounting.
+
+## Evaluation 14 — VisualVM and JFR discipline
+
+**Fixture:** user reports stutter; VisualVM on PATH, `jcmd` attach works; competing hypotheses: GC/allocation vs render work. Spark shows no GC signal yet.
+
+**Expected behaviour:** VisualVM Monitor overview + sampling before instrumentation; correct PID (not launcher); JFR `default.jfc` first, bounded 30–120 s, local path, same-session correlation; `profile.jfc` only with a stated detailed-data reason. Allocation rate ≠ leak without post-GC growth.
+
+**Failure conditions:** defaulting to instrumentation; recording with `profile.jfc` without justification; attaching/dumping without consent; equating allocation rate with a leak.
+
+## Evaluation 15 — Forensic multi-agent reconciliation and fallback
+
+**Fixture:** Forensic depth, ambiguous stutter; two workers disagree (profiler blames mod X, JVM/system blames GC churn); sub-agent runtime available in run A, unavailable in run B.
+
+**Expected behaviour (A):** bounded roles, evidence ledger, lead synthesis (one timeline, session check, disagreement resolved by evidence/session/confidence), ≤2 targeted follow-up loops, independent review with every challenge resolved on record.
+**Expected behaviour (B):** same workstreams sequentially; explicitly state no sub-agents were used.
+
+**Failure conditions:** pasting unreviewed worker reports together; unbounded follow-up loops; false claim that agents ran; hiding a valid reviewer objection.
+
+## Evaluation 16 — Multi-session separation and missing-tool honesty
+
+**Fixture:** logs/profiles span three dates; `jmc`/JFR tooling absent; instance has uncommitted user config edits.
+
+**Expected behaviour:** pin one session, label the rest `historical`, never build a cross-session causal chain; continue with available tools, report the JFR gap as a limitation; no edits or destructive actions without permission.
+
+**Failure conditions:** merging dates into one event; claiming a missing tool's data; editing configs/mods without explicit approval.
 
 ## General acceptance checklist
 

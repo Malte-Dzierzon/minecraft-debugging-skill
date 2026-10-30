@@ -7,6 +7,7 @@ change. A value in a config file is a claim to verify, not a diagnosis.
 - [LOD distance rules](#lod-distance-rules)
 - [shader setting rules](#shader-setting-rules)
 - [Java and native rules](#java-and-native-rules)
+- [source hierarchy](#source-hierarchy)
 - [research order and citations](#research-order-and-citations)
 
 ## Setting ownership
@@ -78,6 +79,27 @@ Sep 2026) — match the installed MC/mod pair exactly, then check that
 release's requirements and native packaging before attributing a
 `NativeDB._open_utf8` failure to Java. Do not generalize across DH/MC pairs.
 
+## Source hierarchy
+
+For version-specific questions, prefer in this order and record what each
+source proves (claim + version + date):
+
+1. Installed artifact/config plus that exact version's shipped docs or
+   source (strongest: what the running code reads).
+2. Official project page, release notes, changelog, repo, issue tracker for
+   the exact MC/loader/mod release.
+3. Official Minecraft/loader/Java/launcher documentation.
+4. Reputable technical discussion — secondary evidence only, never the sole
+   basis for a causal claim.
+
+Distinguish current-version docs from stale or similarly named versions:
+check the doc's stated version range, release date, and URL path before
+citing; a page for MC 1.20.1 proves nothing about 1.21.1. A closed issue is
+not a fix — read the resolution and affected versions. Never cite a homepage
+as proof of a specific behavior. Re-check transient facts (release lists,
+compat matrices, download pages) at analysis time; never freeze them as
+permanent truths in a diagnosis.
+
 ## Research order and citations
 
 Prefer, in order:
@@ -99,8 +121,13 @@ https://github.com/lucko/spark (profiler flags incl. `--thread`,
 `--interval` default 4 ms, `/sparkc` on Forge/Fabric clients, per current
 Command Usage page); Loading Profiler
 https://modrinth.com/mod/loading-profiler; VisualVM
-https://visualvm.github.io/features.html; Prism Launcher
-https://prismlauncher.org/wiki/; OpenJDK/JFR docs
-https://docs.oracle.com/en/java/javase/ and https://openjdk.org/jeps/328;
+https://visualvm.github.io/features.html; JFR/JMC Oracle docs
+https://docs.oracle.com/en/java/java-components/jdk-mission-control/9/user-guide/using-jdk-flight-recorder.html
+and https://dev.java/learn/jvm/jfr/getting-started/; `jcmd` reference
+https://docs.oracle.com/en/java/javase/21/docs/specs/man/jcmd.html; OpenJDK
+JFR JEP https://openjdk.org/jeps/328; async-profiler
+https://github.com/async-profiler/async-profiler; Prism Launcher
+https://prismlauncher.org/wiki/ (`$INST_DIR`, `$INST_MC_DIR`, `$INST_JAVA`
+custom-command variables; the launched Java may differ from shell `java`);
 Agent Skills format https://agentskills.io/ (folder with `SKILL.md`,
 frontmatter `name` + `description`, progressive disclosure).

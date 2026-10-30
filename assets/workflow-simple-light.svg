@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <text x="15" y="24" font-size="15" font-weight="600" fill="#24292f">Pipeline A — Quick / Standard (lightweight sequential)</text>
+  <g fill="#ffffff" stroke="#57606a" stroke-width="1.5">
+    <rect x="295" y="48" width="135" height="56" rx="6"/>
+    <rect x="590" y="48" width="160" height="56" rx="6"/>
+    <rect x="120" y="216" width="160" height="56" rx="6"/>
+    <rect x="315" y="216" width="140" height="56" rx="6"/>
+  </g>
+  <g fill="#ffffff" stroke="#0969da" stroke-width="1.5">
+    <polygon points="215,40 285,76 215,112 145,76"/>
+    <polygon points="510,40 580,76 510,112 440,76"/>
+    <polygon points="845,40 915,76 845,112 775,76"/>
+  </g>
+  <g fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5">
+    <rect x="15" y="48" width="120" height="56" rx="6"/>
+    <rect x="760" y="216" width="170" height="56" rx="6"/>
+  </g>
+  <g fill="none" stroke="#57606a" stroke-width="1.5">
+    <path d="M 135 76 H 143" marker-end="url(#arrow)"/>
+    <path d="M 285 76 H 293" marker-end="url(#arrow)"/>
+    <path d="M 430 76 H 438" marker-end="url(#arrow)"/>
+    <path d="M 580 76 H 588" marker-end="url(#arrow)"/>
+    <path d="M 750 76 H 773" marker-end="url(#arrow)"/>
+    <path d="M 810 112 V 158 H 200 V 214" marker-end="url(#arrow)"/>
+    <path d="M 845 112 V 214" marker-end="url(#arrow)"/>
+    <path d="M 280 244 H 313" marker-end="url(#arrow)"/>
+    <path d="M 455 244 H 758" marker-end="url(#arrow)"/>
+  </g>
+  <g fill="#24292f" font-size="14" text-anchor="middle">
+    <text x="75" y="71">start</text>
+    <text x="362" y="71">recon</text>
+    <text x="670" y="71">targeted</text>
+    <text x="200" y="241">one capture</text>
+    <text x="385" y="241">verify</text>
+    <text x="845" y="241">report</text>
+    <text x="215" y="72">path?</text>
+    <text x="845" y="81">enough?</text>
+  </g>
+  <g fill="#57606a" font-size="12" text-anchor="middle">
+    <text x="75" y="89">user report</text>
+    <text x="362" y="89">read-only</text>
+    <text x="670" y="89">evidence</text>
+    <text x="200" y="259">ask first</text>
+    <text x="385" y="259">versions/configs</text>
+    <text x="845" y="259">bottom line + test</text>
+    <text x="215" y="90">user gives path</text>
+    <text x="510" y="71">Quick or</text>
+    <text x="510" y="89">Standard?</text>
+    <text x="505" y="150">Standard / need data</text>
+    <text x="606" y="236">bounded, local</text>
+  </g>
+  <g fill="#9a6700" font-size="12">
+    <text x="853" y="168">Quick: yes</text>
+    <text x="15" y="316">◈ = user input / approval</text>
+  </g>
+</svg>
